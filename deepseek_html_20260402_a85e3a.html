@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>⚡ CYBER DIARY PRO · Hybrid Rank & Iron Log</title>
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(circle at 20% 30%, #03050b, #000000);
+      font-family: 'Inter', 'Segoe UI', monospace;
+      color: #eef5ff;
+      scroll-behavior: smooth;
+    }
+    /* cyber glass + neon */
+    .cyber-card {
+      background: rgba(8, 12, 25, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 28px;
+      box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: all 0.2s ease;
+    }
+    .cyber-card:hover {
+      border-color: #0ff;
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.4);
+    }
+    .neon-text {
+      font-family: 'Orbitron', monospace;
+      text-shadow: 0 0 4px cyan, 0 0 2px #0ff;
+      letter-spacing: 1px;
+    }
+    .glow-btn {
+      background: linear-gradient(135deg, #0a142e, #010514);
+      border: 1px solid #0ff;
+      transition: 0.2s;
+    }
+    .glow-btn:hover {
+      background: #00a6ff20;
+      box-shadow: 0 0 12px cyan;
+      border-color: cyan;
+      transform: scale(0.98);
+    }
+    .rank-badge {
+      font-family: 'Orbitron', monospace;
+      font-weight: 800;
+      background: #000000aa;
+      backdrop-filter: blur(4px);
+      border-radius: 40px;
+      padding: 0.2rem 0.8rem;
+      border: 1px solid cyan;
+    }
+    .tier-s { background: linear-gradient(145deg, #ffd966, #ff9f2e); color: #1a0f00; box-shadow: 0 0 12px gold; border: none; }
+    .tier-a { background: linear-gradient(145deg, #c0c0e0, #a0a0ff); color: #0a0a2a; }
+    .tier-b { background: linear-gradient(145deg, #cd7f32, #b86b1f); color: #fff0dd; }
+    .tier-c { background: #2a5f7a; color: #e0f2fe; border: 1px solid #3aa8ff; }
+    .tier-d { background: #4a5260; color: #f0f0f0; }
+    .tier-e { background: #4a2e2e; color: #ffb7b7; }
+    .progress-neon {
+      background: rgba(0, 255, 255, 0.15);
+      border-radius: 40px;
+      overflow: hidden;
+    }
+    .progress-fill-neon {
+      background: linear-gradient(90deg, #0ff, #3b82f6);
+      height: 8px;
+      width: 0%;
+      border-radius: 40px;
+      box-shadow: 0 0 6px cyan;
+    }
+    .page {
+      display: none;
+      animation: fadeGlow 0.3s ease;
+    }
+    .page.active { display: block; }
+    @keyframes fadeGlow {
+      0% { opacity: 0; filter: blur(2px);}
+      100% { opacity: 1; filter: blur(0);}
+    }
+    .nav-btn {
+      background: #0f1222cc;
+      backdrop-filter: blur(8px);
+      border: 1px solid #2affee55;
+      font-weight: 600;
+    }
+    .nav-btn.active-nav {
+      background: #00ccff22;
+      border-color: cyan;
+      box-shadow: 0 0 10px cyan;
+      color: #aaffff;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #03050b; }
+    ::-webkit-scrollbar-thumb { background: cyan; border-radius: 10px; }
+    input, select, textarea {
+      background: #0a0e1c;
+      border: 1px solid #2affaa44;
+      border-radius: 16px;
+      padding: 8px 12px;
+      color: white;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: cyan;
+      box-shadow: 0 0 8px cyan;
+    }
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .table-cyber th {
+      background: #030617cc;
+      backdrop-filter: blur(8px);
+      font-family: 'Orbitron', monospace;
+      border-bottom: 1px solid cyan;
+    }
+    .set-row {
+      background: #0b0f1e;
+      border-radius: 20px;
+      padding: 6px;
+      margin-bottom: 6px;
+      border-left: 3px solid cyan;
+    }
+    .chat-message-user {
+      background: #0f2c44;
+      border-radius: 20px 20px 4px 20px;
+      border: 1px solid cyan;
+    }
+    .chat-message-assistant {
+      background: #191e2e;
+      border-radius: 20px 20px 20px 4px;
+      border: 1px solid #ff66cc;
+    }
+  </style>
+</head>
+<body class="pb-24">
+
+<div class="max-w-7xl mx-auto px-4 py-5">
+  <!-- Header cyber -->
+  <div class="flex flex-wrap justify-between items-center gap-4 mb-6 cyber-card p-4 rounded-2xl">
+    <div>
+      <h1 class="text-3xl font-black neon-text bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"><i class="fas fa-microchip mr-2"></i>CYBER DIARY · 1RM MATRIX</h1>
+      <p class="text-xs text-cyan-300/80 tracking-wider">⚡ hybrid training · 50% powerlifting / 50% classic physique | quantum logs</p>
+    </div>
+    <div class="flex flex-wrap gap-2 text-sm">
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-trophy text-yellow-400"></i> <span id="hunterRankName">Recruit</span></div>
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-star-of-life text-cyan-400"></i> <span id="totalXPDisplay">0</span> XP</div>
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-fire text-red-400"></i> <span id="streakValue">0</span></div>
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-snowflake text-blue-300"></i> <span id="freezeTokens">2</span></div>
+    </div>
+  </div>
+
+  <!-- Navigation cyber -->
+  <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="dashboard">📊 DASHBOARD</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="diary-calendar">📆 DIARY LOG</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="ai-coach">🤖 AI COACH</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="muscles">💪 MUSCLE GRID</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="ranking">🏆 S→E RANKING</button>
+  </div>
+
+  <!-- ========== DASHBOARD ========== -->
+  <div id="page-dashboard" class="page active">
+    <div class="cyber-card p-5 mb-6">
+      <div class="flex flex-wrap justify-between gap-4 items-center">
+        <div><i class="fas fa-dna text-cyan-400"></i> <span class="font-bold neon-text">TRAINING PHASE</span></div>
+        <select id="planSelector" class="bg-black/60 border-cyan-500 rounded-full px-4 py-2 text-sm">
+          <option value="normal">🏋️ Hybrid (Physique+Power)</option>
+          <option value="physique">💪 Classic Physique (V‑Taper)</option>
+          <option value="power">⚡ Powerlifting (Peak)</option>
+        </select>
+        <button id="regeneratePlanBtn" class="glow-btn text-xs px-4 py-1.5 rounded-full"><i class="fab fa-google"></i> Gemini Plan</button>
+      </div>
+      <div id="aiPlanStatus" class="text-xs text-amber-400 mt-2"></div>
+      <div id="planDisplay" class="mt-4 space-y-3 max-h-[500px] overflow-y-auto pr-1"></div>
+      <div class="flex gap-3 mt-4">
+        <button id="adjustPlanBtn" class="flex-1 bg-blue-800/60 border border-blue-400 py-2 rounded-xl text-sm"><i class="fas fa-sliders-h"></i> AI Adjust</button>
+        <button id="logFullDayBtn" class="flex-1 bg-cyan-700/70 border border-cyan-300 py-2 rounded-xl text-sm"><i class="fas fa-calendar-check"></i> LOG TODAY'S PLAN</button>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+      <div class="cyber-card p-4 border-l-4 border-l-amber-400">
+        <h2 class="text-xl font-bold"><i class="fas fa-user-astronaut mr-2 text-amber-400"></i>CLASSIC PHYSIQUE</h2>
+        <div class="mt-2 flex justify-between"><span>V‑Taper Ratio</span><span id="vTaperScore" class="font-mono">0.00</span></div>
+        <div class="progress-neon mt-1"><div id="vTaperProgress" class="progress-fill-neon w-0"></div></div>
+        <div class="grid grid-cols-2 gap-2 text-xs mt-3"><div>Shoulder: <span id="shoulderWidthVal">--</span> cm</div><div>Waist: <span id="waistVal">--</span> cm</div></div>
+        <button id="updateMeasurementsBtn" class="mt-3 bg-amber-800/60 text-xs py-1.5 px-3 rounded-full">Update Stats</button>
+      </div>
+      <div class="cyber-card p-4 border-l-4 border-l-red-400">
+        <h2 class="text-xl font-bold"><i class="fas fa-dumbbell mr-2 text-red-400"></i>POWERLIFTING SBD</h2>
+        <div class="grid grid-cols-3 gap-1 text-center text-xs mt-2"><div>Squat<br><span id="squatVal" class="font-bold text-lg">0</span> kg</div><div>Bench<br><span id="benchVal" class="font-bold text-lg">0</span> kg</div><div>Deadlift<br><span id="deadliftVal" class="font-bold text-lg">0</span> kg</div></div>
+        <div class="flex justify-between mt-2"><span>Total: <span id="powerTotal">0</span> kg</span><span id="powerRankBadge" class="text-xs bg-black/40 px-2 py-0.5 rounded-full">Novice</span></div>
+        <button id="updateLiftsBtn" class="mt-3 bg-red-800/60 text-xs py-1.5 px-3 rounded-full">Update PRs</button>
+      </div>
+    </div>
+
+    <div class="cyber-card p-5 mb-6">
+      <h2 class="font-bold text-lg"><i class="fas fa-bolt text-cyan-400"></i> QUICK LOG (3 sets x 8 reps)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+        <select id="quickMuscle" class="bg-black/60"></select>
+        <select id="quickExercise" class="bg-black/60"></select>
+        <select id="workoutType" class="bg-black/60"><option value="strength">💪 Strength</option><option value="mass">🏋️ Mass</option><option value="endurance">🏃 Endurance</option><option value="recovery">🧘 Recovery</option></select>
+        <input type="number" id="quickWeight" value="40" placeholder="Weight (kg)" class="bg-black/60">
+      </div>
+      <button id="logWorkoutBtn" class="mt-4 w-full glow-btn py-2 rounded-xl font-bold tracking-wide">⚡ LOG TODAY (adds 3 sets)</button>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="cyber-card p-4"><h2 class="font-bold"><i class="fas fa-tasks text-sky-400"></i> DAILY QUESTS</h2><div id="dailyQuestsList" class="space-y-2 mt-2 text-sm"></div></div>
+      <div class="cyber-card p-4"><h2 class="font-bold"><i class="fas fa-calendar-week text-indigo-400"></i> WEEKLY QUESTS</h2><div id="weeklyQuestsList" class="space-y-2 mt-2 text-sm"></div></div>
+    </div>
+    <div class="cyber-card p-4 mt-5 flex justify-between items-center flex-wrap">
+      <div><i class="fas fa-skull text-red-400 text-2xl"></i> <span class="font-bold">MONTHLY BOSS</span> <span id="bossProgressText">0/2000 XP</span></div>
+      <button id="claimBossBtn" class="bg-red-800/70 border border-red-500 px-5 py-1.5 rounded-full">Claim 500 XP</button>
+    </div>
+  </div>
+
+  <!-- DIARY PAGE -->
+  <div id="page-diary-calendar" class="page">
+    <div class="cyber-card p-5">
+      <h2 class="text-xl font-bold neon-text"><i class="fas fa-calendar-alt mr-2"></i>DETAILED LOGS · SET BY SET</h2>
+      <div id="calendarDays" class="grid grid-cols-7 gap-2 my-4"></div>
+      <div class="bg-black/40 rounded-2xl p-4">
+        <div class="flex justify-between flex-wrap gap-2"><h3 id="selectedDayTitle" class="text-cyan-300 font-bold">Select a day</h3><button id="addExerciseToDayBtn" class="bg-green-700/70 px-3 py-1 rounded-full text-sm"><i class="fas fa-plus"></i> Add Exercise</button></div>
+        <div id="dayExercisesList" class="mt-3 space-y-3 max-h-96 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI COACH PAGE -->
+  <div id="page-ai-coach" class="page">
+    <div class="cyber-card p-5">
+      <div class="flex justify-between items-center"><h2 class="font-bold"><i class="fab fa-google text-green-400"></i> GEMINI AI COACH</h2><button id="configApiBtn" class="text-xs bg-gray-700 px-2 py-1 rounded">🔑 Set API Key</button></div>
+      <div id="chatMessages" class="h-80 overflow-y-auto text-sm space-y-2 my-3 p-3 bg-black/40 rounded-2xl"></div>
+      <div class="flex gap-2"><input type="text" id="chatInput" placeholder="Ask Gemini: training, nutrition, form..." class="flex-1"><button id="sendChatBtn" class="bg-purple-700 px-4 rounded-full"><i class="fas fa-paper-plane"></i></button></div>
+    </div>
+  </div>
+
+  <!-- MUSCLES PAGE -->
+  <div id="page-muscles" class="page">
+    <div class="cyber-card p-5"><h2 class="font-bold"><i class="fas fa-microchip text-cyan-400"></i> 17 MUSCLES · CYBER RANK</h2><div id="muscleGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 max-h-[70vh] overflow-y-auto"></div></div>
+  </div>
+
+  <!-- ========== HYBRID RANKING PAGE (S→E) ========== -->
+  <div id="page-ranking" class="page">
+    <div class="cyber-card p-5">
+      <div class="flex flex-wrap justify-between items-center border-b border-cyan-500/50 pb-3 mb-4">
+        <div><h2 class="text-2xl font-black neon-text"><i class="fas fa-chart-line"></i> SHADOW HYBRID RANKING</h2><p class="text-xs text-gray-300">50% POWERLIFTING TOTAL · 50% CLASSIC PHYSIQUE SCORE → S to E TIER</p></div>
+        <div class="flex gap-2 flex-wrap">
+          <button id="rankSortComposite" class="active-sort text-xs bg-cyan-900/40 border border-cyan-500 px-3 py-1.5 rounded-full">🏆 Hybrid Rank</button>
+          <button id="rankSortTotal" class="text-xs bg-gray-800/40 border-gray-600 px-3 py-1.5 rounded-full">🏋️ Power Total</button>
+          <button id="rankSortClassic" class="text-xs bg-gray-800/40 border-gray-600 px-3 py-1.5 rounded-full">💪 Classic Score</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm border-separate border-spacing-0">
+          <thead class="table-cyber">
+            <tr class="text-cyan-200"><th class="p-3">TIER</th><th class="p-3">SOLDIER</th><th class="p-3 text-center">🏋️ TOTAL (kg)</th><th class="p-3 text-center">💪 CLASSIC</th><th class="p-3 text-center">⚡ COMPOSITE</th><th class="p-3 hidden md:table-cell">BREAKDOWN</th></tr>
+          </thead>
+          <tbody id="rankingTableBody"></tbody>
+        </table>
+      </div>
+      <div class="mt-5 text-[11px] text-gray-400 flex justify-center gap-4 border-t border-cyan-800/50 pt-3"><span><i class="fas fa-chart-simple text-cyan-400"></i> S:≥94 | A:85-93.9 | B:75-84.9 | C:65-74.9 | D:55-64.9 | E:≤54.9</span><span><i class="fas fa-balance-scale"></i> Hybrid = 50% normTotal + 50% aesthetic</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FOR EXERCISE -->
+<div id="exerciseModal" style="display:none;" class="fixed inset-0 bg-black/80 backdrop-blur flex items-center justify-center z-50"><div class="bg-gray-900 rounded-2xl p-5 max-w-md w-full border border-cyan-500"><h3 id="modalTitle" class="text-xl font-bold mb-3">Add Exercise</h3><select id="exMuscle" class="w-full mb-2"></select><select id="exNameSelect" class="w-full mb-2"></select><input id="exCustomName" placeholder="Custom name" class="w-full mb-2"><select id="exType" class="w-full mb-2"><option value="strength">Strength</option><option value="mass">Mass</option><option value="endurance">Endurance</option><option value="recovery">Recovery</option></select><textarea id="exNotes" rows="2" placeholder="notes" class="w-full mb-2"></textarea><div class="font-bold">Sets</div><div id="setsContainer" class="space-y-2 mb-3"></div><button id="addSetBtn" class="bg-blue-600 text-xs px-3 py-1 rounded-full">+ Add Set</button><div class="flex gap-2 mt-4"><button id="saveExerciseBtn" class="flex-1 bg-orange-600 py-2 rounded-xl">Save</button><button id="closeModalBtn" class="flex-1 bg-gray-700 py-2 rounded-xl">Cancel</button></div></div></div>
+
+<script>
+  // ---------- EXISTING IRON DIARY CORE ----------
+  const EXERCISE_LIB = {
+    "Chest":["Barbell Bench Press","Incline DB Press","Cable Fly","Dumbbell Bench Press"],"Back":["Pull-ups","Lat Pulldown","Barbell Row","Seated Cable Row","Face Pull"],"Shoulders":["DB Shoulder Press","Overhead Press","Lateral Raise","Rear Delt Fly"],"Biceps":["Barbell Curls","Dumbbell Curls"],"Triceps":["Triceps Pushdowns","Skull Crushers"],"Forearms":["Wrist Curls"],"Abs":["Crunches","Leg Raises"],"Obliques":["Side Bends"],"Quadriceps":["Back Squat","Front Squat","Leg Press"],"Hamstrings":["Romanian Deadlift","Leg Curl"],"Glutes":["Hip Thrusts"],"Calves":["Standing Calf Raise"],"Traps":["Barbell Shrugs"],"Neck":["Neck Flexion"],"Lower Back":["Back Extension","Deadlift"],"Adductors":["Adductor Machine"],"Abductors":["Abductor Machine"]
+  };
+  const MUSCLES = Object.keys(EXERCISE_LIB);
+  let appData = { workoutDiary:[], geminiApiKey:"", currentPlan:"normal", aiGeneratedPlan:null, shoulderCm:108, waistCm:72, squatKg:85, benchKg:65, deadliftKg:120, dailyQuests:[], weeklyQuests:[], bossClaimed:false, freezeTokens:2, lastFreezeResetWeek:null, lastDailyReset:null, lastWeeklyReset:null, currentMonthKey:null, totalXP:0, streak:0, muscleXP:{}, muscleLastWorked:{}, bossProgress:0 };
+  let currentEditDate = null, currentEditExerciseIdx = null, setRows = [];
+  function getTodayStr(){ return new Date().toISOString().slice(0,10); }
+  function getWeekKey(){ const d=new Date(); const year=d.getFullYear(); const week=Math.floor((d-new Date(year,0,1))/86400000/7); return `${year}-W${week}`; }
+  function getMonthKey(){ const d=new Date(); return `${d.getFullYear()}-${d.getMonth()}`; }
+  function dayDiff(a,b){ return Math.floor((new Date(b)-new Date(a))/86400000); }
+  function saveData(){ localStorage.setItem("CYBER_DIARY_V2", JSON.stringify(appData)); }
+  function loadData(){
+    const saved = localStorage.getItem("CYBER_DIARY_V2");
+    if(saved) Object.assign(appData, JSON.parse(saved));
+    if(!appData.workoutDiary) appData.workoutDiary = [];
+    if(!appData.muscleXP) appData.muscleXP = {};
+    MUSCLES.forEach(m=>{ if(appData.muscleXP[m]===undefined) appData.muscleXP[m]=0; });
+    if(!appData.dailyQuests) appData.dailyQuests = generateDailyQuests();
+    if(!appData.weeklyQuests) appData.weeklyQuests = generateWeeklyQuests();
+    if(!appData.aiGeneratedPlan) appData.aiGeneratedPlan = { days:[] };
+    checkResets(); recalcAll(); saveData();
+  }
+  function generateDailyQuests(){ return [{id:"d1",desc:"Complete workout",target:1,progress:0,type:"workout_count",rewardXP:40,claimed:false},{id:"d2",desc:"Earn 60 XP",target:60,progress:0,type:"xp_gain",rewardXP:45,claimed:false},{id:"d3",desc:"Train Shoulders/Back",target:1,progress:0,type:"aesthetic",rewardXP:35,claimed:false}]; }
+  function generateWeeklyQuests(){ return [{id:"w1",desc:"5 workouts",target:5,progress:0,type:"workout_count",rewardXP:200,claimed:false},{id:"w2",desc:"Increase SBD total by 10kg",target:10,progress:0,type:"sbd_increase",rewardXP:180,claimed:false,startingTotal:appData.squatKg+appData.benchKg+appData.deadliftKg},{id:"w3",desc:"3 shoulder sessions",target:3,progress:0,type:"aesthetic",rewardXP:150,claimed:false}]; }
+  function checkResets(){ const wk=getWeekKey(); if(appData.lastFreezeResetWeek!==wk){ appData.freezeTokens=2; appData.lastFreezeResetWeek=wk; } const cur=getMonthKey(); if(appData.currentMonthKey!==cur){ appData.bossProgress=0; appData.bossClaimed=false; appData.currentMonthKey=cur; } const today=getTodayStr(); if(appData.lastDailyReset!==today){ appData.dailyQuests=generateDailyQuests(); appData.lastDailyReset=today; } const weekKey=getWeekKey(); if(appData.lastWeeklyReset!==weekKey){ appData.weeklyQuests=generateWeeklyQuests(); appData.lastWeeklyReset=weekKey; } saveData(); }
+  function recalcAll(){ let newMuscleXP={}; MUSCLES.forEach(m=>newMuscleXP[m]=0); let total=0,boss=0,lastMap={}; const entries=[...appData.workoutDiary].sort((a,b)=>new Date(a.date)-new Date(b.date)); for(let entry of entries){ for(let ex of entry.exercises){ let xpGain=0; for(let set of (ex.sets||[])){ let vol= (set.reps||1)*(set.weight||0); let gain=Math.min(30, Math.floor(vol/6)+3); if(ex.type==="strength") gain*=1.2; xpGain+=gain; } xpGain=Math.min(xpGain,65); if(ex.muscle && MUSCLES.includes(ex.muscle)) newMuscleXP[ex.muscle]=Math.min((newMuscleXP[ex.muscle]||0)+xpGain,1600); total+=xpGain+5; boss+=xpGain+5; if(ex.muscle) lastMap[ex.muscle]=entry.date; } }
+    appData.muscleXP=newMuscleXP; appData.totalXP=total; appData.bossProgress=Math.min(boss,2000); for(let m of MUSCLES) appData.muscleLastWorked[m]=lastMap[m]||null;
+    let streak=0,today=getTodayStr(); let dates=Array.from(new Set(entries.map(e=>e.date))).sort(); let idx=dates.indexOf(today); if(idx!==-1){ streak=1; for(let i=idx-1;i>=0;i--) if(dayDiff(dates[i],dates[i+1])===1) streak++; else break; }
+    appData.streak=streak; saveData(); renderAllUI();
+  }
+  function renderAllUI(){ renderHeaderStats(); renderPhysiquePower(); renderQuests(); renderBoss(); renderMuscles(); renderCalendarDays(); renderPlan(); if(document.getElementById("selectedDayTitle")) renderSelectedDayView(currentSelectedDate); }
+  function renderHeaderStats(){ const thresholds=[0,120,280,480,720,1000,1350,1750,2200,2700,3300,4000,4800,5800,7000,8500]; const ranks=["Recruit","Scout","Fighter","Slayer","Raider","Warlord","Champion","Gladiator","Destroyer","Conqueror","Vanquisher","Mythic","Shadow","Elder","Dragonheart","LEGEND"]; let idx=thresholds.reduce((p,c,i)=>appData.totalXP>=c?i:p,0); document.getElementById("hunterRankName").innerText=ranks[idx]; document.getElementById("totalXPDisplay").innerHTML=appData.totalXP; document.getElementById("streakValue").innerHTML=appData.streak; document.getElementById("freezeTokens").innerHTML=appData.freezeTokens; }
+  function renderPhysiquePower(){ document.getElementById("vTaperScore").innerHTML=(appData.shoulderCm/appData.waistCm).toFixed(2); document.getElementById("vTaperProgress").style.width=Math.min(100,(appData.shoulderCm/appData.waistCm/1.8)*100)+"%"; document.getElementById("shoulderWidthVal").innerHTML=appData.shoulderCm; document.getElementById("waistVal").innerHTML=appData.waistCm; document.getElementById("squatVal").innerHTML=appData.squatKg; document.getElementById("benchVal").innerHTML=appData.benchKg; document.getElementById("deadliftVal").innerHTML=appData.deadliftKg; document.getElementById("powerTotal").innerHTML=appData.squatKg+appData.benchKg+appData.deadliftKg; let pwr=appData.squatKg+appData.benchKg+appData.deadliftKg; let ranks=["Untrained","Novice","Intermediate","Advanced","Elite","Master"]; document.getElementById("powerRankBadge").innerHTML=ranks[Math.min(5,Math.floor(pwr/100))]; }
+  function renderQuests(){ let dailyDiv=document.getElementById("dailyQuestsList"); if(dailyDiv){ dailyDiv.innerHTML=""; for(let q of appData.dailyQuests){ let done=q.progress>=q.target; dailyDiv.innerHTML+=`<div class="flex justify-between items-center"><span>${q.desc} (+${q.rewardXP})</span><button class="claimQuestBtn" data-type="daily" data-id="${q.id}" ${q.claimed||!done?'disabled':''}>${q.claimed?"✅":done?"CLAIM":"🔒"}</button></div>`; } } let weeklyDiv=document.getElementById("weeklyQuestsList"); if(weeklyDiv){ weeklyDiv.innerHTML=""; for(let q of appData.weeklyQuests){ let done=q.progress>=q.target; weeklyDiv.innerHTML+=`<div class="flex justify-between"><span>${q.desc} (+${q.rewardXP})</span><button class="claimQuestBtn" data-type="weekly" data-id="${q.id}" ${q.claimed||!done?'disabled':''}>${q.claimed?"🏆":done?"CLAIM":"⏳"}</button></div>`; } } attachQuestListeners(); }
+  function attachQuestListeners(){ document.querySelectorAll(".claimQuestBtn").forEach(btn=>btn.addEventListener("click",()=>{ let type=btn.dataset.type, id=btn.dataset.id; let arr=type==="daily"?appData.dailyQuests:appData.weeklyQuests; let q=arr.find(q=>q.id===id); if(q && !q.claimed && q.progress>=q.target){ q.claimed=true; appData.totalXP+=q.rewardXP; saveData(); renderAllUI(); showToast(`+${q.rewardXP} XP`); } })); }
+  function renderBoss(){ let boss=appData.bossProgress; document.getElementById("bossProgressText").innerHTML=`${boss}/2000 XP`; let claimBtn=document.getElementById("claimBossBtn"); if(claimBtn) claimBtn.disabled=appData.bossClaimed||boss<2000; }
+  function renderMuscles(){ let c=document.getElementById("muscleGrid"); if(!c)return; c.innerHTML=""; const ranks=["Untrained","Novice","Beginner","Apprentice","Intermediate","Advanced","Elite","Master","Grandmaster","Expert","Champion","Hero","Mythic","Epic","Legendary","Overlord"]; for(let m of MUSCLES){ let xp=appData.muscleXP[m]||0; let idx=Math.min(15,Math.floor(xp/100)); let p=((xp-(idx*100))/100)*100; c.innerHTML+=`<div class="bg-black/40 p-2 rounded-xl border border-cyan-800"><div class="flex justify-between"><span>${m}</span><span class="text-xs">${ranks[idx]}</span></div><div class="progress-neon mt-1"><div class="progress-fill-neon" style="width:${p}%"></div></div><div class="text-[10px]">${xp} XP</div></div>`; } }
+  let currentSelectedDate=getTodayStr();
+  function renderCalendarDays(){ let container=document.getElementById("calendarDays"); if(!container)return; let today=new Date(); let year=today.getFullYear(), month=today.getMonth(); let lastDay=new Date(year,month+1,0); let html=""; for(let d=1;d<=lastDay.getDate();d++){ let dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; let hasEntry=appData.workoutDiary.some(e=>e.date===dateStr); html+=`<button class="day-btn ${currentSelectedDate===dateStr?'bg-cyan-700': 'bg-gray-800'} p-2 rounded-lg text-xs" data-date="${dateStr}">${d}<br>${hasEntry?'📝':''}</button>`; } container.innerHTML=html; document.querySelectorAll(".day-btn").forEach(btn=>btn.addEventListener("click",()=>{ currentSelectedDate=btn.dataset.date; renderCalendarDays(); renderSelectedDayView(currentSelectedDate); })); }
+  function renderSelectedDayView(date){ let title=document.getElementById("selectedDayTitle"); let list=document.getElementById("dayExercisesList"); if(!title)return; title.innerText=`📅 ${date}`; let entry=appData.workoutDiary.find(e=>e.date===date); if(!entry||entry.exercises.length===0){ list.innerHTML='<div class="text-center p-4 text-gray-400">No logs. Click + Add Exercise</div>'; return; } list.innerHTML=entry.exercises.map((ex,idx)=>`<div class="bg-gray-900 p-3 rounded-xl"><div class="flex justify-between"><div><span class="font-bold text-cyan-300">${ex.name}</span> · ${ex.muscle} · ${ex.type}</div><div><button class="editExBtn text-blue-400 text-xs mr-2" data-idx="${idx}">✎ Edit</button><button class="deleteExBtn text-red-400 text-xs" data-idx="${idx}">🗑</button></div></div><div class="text-xs mt-1">${ex.sets.map((s,i)=>`Set ${i+1}: ${s.reps} reps × ${s.weight}kg`).join(' · ')}</div></div>`).join(''); document.querySelectorAll(".deleteExBtn").forEach(btn=>btn.addEventListener("click",()=>{ let i=parseInt(btn.dataset.idx); let entry=appData.workoutDiary.find(e=>e.date===date); if(entry){ entry.exercises.splice(i,1); if(entry.exercises.length===0) appData.workoutDiary=appData.workoutDiary.filter(e=>e.date!==date); recalcAll(); renderSelectedDayView(date); renderCalendarDays(); } })); document.querySelectorAll(".editExBtn").forEach(btn=>btn.addEventListener("click",()=>openExerciseModal(date,parseInt(btn.dataset.idx),entry.exercises[parseInt(btn.dataset.idx)]))); }
+  function openExerciseModal(date,editIdx=null,existing=null){ currentEditDate=date; currentEditExerciseIdx=editIdx; document.getElementById("modalTitle").innerText=editIdx!==null?"Edit Exercise":"Add Exercise"; let muscleSelect=document.getElementById("exMuscle"); muscleSelect.innerHTML=MUSCLES.map(m=>`<option value="${m}">${m}</option>`).join(''); muscleSelect.addEventListener("change",()=>updateExerciseSelectByMuscle(muscleSelect.value)); if(existing){ muscleSelect.value=existing.muscle||"Chest"; updateExerciseSelectByMuscle(muscleSelect.value); document.getElementById("exNameSelect").value=existing.name||""; document.getElementById("exCustomName").value=""; document.getElementById("exType").value=existing.type||"strength"; document.getElementById("exNotes").value=existing.notes||""; setRows=existing.sets?[...existing.sets]:[{reps:8,weight:40}]; }else{ muscleSelect.value="Chest"; updateExerciseSelectByMuscle("Chest"); document.getElementById("exNameSelect").value=EXERCISE_LIB["Chest"][0]; document.getElementById("exCustomName").value=""; document.getElementById("exType").value="strength"; document.getElementById("exNotes").value=""; setRows=[{reps:8,weight:40}]; } renderSetRows(); document.getElementById("exerciseModal").style.display="flex"; }
+  function updateExerciseSelectByMuscle(muscle){ let select=document.getElementById("exNameSelect"); select.innerHTML=(EXERCISE_LIB[muscle]||["Barbell Press"]).map(ex=>`<option value="${ex}">${ex}</option>`).join(''); }
+  function renderSetRows(){ let container=document.getElementById("setsContainer"); container.innerHTML=""; setRows.forEach((set,idx)=>{ let div=document.createElement("div"); div.className="set-row flex gap-2 items-center"; div.innerHTML=`<input type="number" placeholder="Reps" value="${set.reps}" class="set-reps w-20" data-idx="${idx}"><input type="number" placeholder="kg" value="${set.weight}" class="set-weight w-24" data-idx="${idx}"><button class="removeSetBtn text-red-400" data-idx="${idx}"><i class="fas fa-trash"></i></button>`; container.appendChild(div); }); document.querySelectorAll(".set-reps").forEach(inp=>inp.addEventListener("change",(e)=>{ let i=parseInt(inp.dataset.idx); setRows[i].reps=parseInt(inp.value)||0; })); document.querySelectorAll(".set-weight").forEach(inp=>inp.addEventListener("change",(e)=>{ let i=parseInt(inp.dataset.idx); setRows[i].weight=parseFloat(inp.value)||0; })); document.querySelectorAll(".removeSetBtn").forEach(btn=>btn.addEventListener("click",(e)=>{ let i=parseInt(btn.dataset.idx); setRows.splice(i,1); renderSetRows(); })); }
+  function addDetailedExerciseToDate(date,ex){ let entry=appData.workoutDiary.find(e=>e.date===date); if(!entry){ entry={date,exercises:[]}; appData.workoutDiary.push(entry); } if(currentEditExerciseIdx!==null && currentEditDate===date) entry.exercises[currentEditExerciseIdx]=ex; else entry.exercises.push(ex); currentEditExerciseIdx=null; currentEditDate=null; recalcAll(); renderSelectedDayView(date); renderCalendarDays(); showToast("Saved"); }
+  function showToast(msg){ let t=document.createElement("div"); t.className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-black/90 text-cyan-300 px-4 py-2 rounded-full text-xs border border-cyan-500 z-50"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),1500); }
+  function estimateWeight(name,percent,user){ let l=name.toLowerCase(); if(l.includes("bench")) return Math.round(user.benchKg*percent/100); if(l.includes("squat")) return Math.round(user.squatKg*percent/100); if(l.includes("deadlift")) return Math.round(user.deadliftKg*percent/100); return Math.round((user.benchKg+user.squatKg+user.deadliftKg)/3*percent/100); }
+  const NORMAL_PLAN = { days: [{dayName:"Monday",exercises:[{name:"Barbell Bench Press",sets:4,reps:"4-6",muscle:"Chest",percent:75}]},{dayName:"Tuesday",exercises:[{name:"Pull-ups",sets:4,reps:"6-10",muscle:"Back",percent:70}]},{dayName:"Wednesday",exercises:[{name:"Back Squat",sets:4,reps:"3-5",muscle:"Quadriceps",percent:80}]},{dayName:"Thursday",exercises:[{name:"Overhead Press",sets:4,reps:"5-8",muscle:"Shoulders",percent:65}]},{dayName:"Friday",exercises:[{name:"Deadlift",sets:4,reps:"3-5",muscle:"Back",percent:85}]}] };
+  const PHYSIQUE_PLAN = { days: [{dayName:"Monday",exercises:[{name:"Overhead Press",sets:5,reps:"4-6",muscle:"Shoulders",percent:75}]},{dayName:"Tuesday",exercises:[{name:"Pull-ups (wide)",sets:5,reps:"6-8",muscle:"Back",percent:70}]},{dayName:"Wednesday",exercises:[{name:"Squats",sets:4,reps:"5-8",muscle:"Quadriceps",percent:75}]},{dayName:"Thursday",exercises:[{name:"Incline Bench",sets:4,reps:"6-8",muscle:"Chest",percent:75}]},{dayName:"Friday",exercises:[{name:"Deadlifts",sets:4,reps:"3-5",muscle:"Back",percent:85}]}] };
+  const POWER_PLAN = { days: [{dayName:"Monday",exercises:[{name:"Squats",sets:5,reps:"3-5",muscle:"Quadriceps",percent:85}]},{dayName:"Tuesday",exercises:[{name:"Deadlifts",sets:5,reps:"3-5",muscle:"Back",percent:90}]},{dayName:"Wednesday",exercises:[{name:"Bench Press",sets:5,reps:"3-5",muscle:"Chest",percent:85}]},{dayName:"Thursday",exercises:[{name:"Squats",sets:5,reps:"3-5",muscle:"Quadriceps",percent:87}]},{dayName:"Friday",exercises:[{name:"Deadlifts",sets:5,reps:"3-5",muscle:"Back",percent:92}]}] };
+  function setActivePlan(p){ appData.currentPlan=p; appData.aiGeneratedPlan = p==="normal"?NORMAL_PLAN:p==="physique"?PHYSIQUE_PLAN:POWER_PLAN; saveData(); renderPlan(); }
+  function renderPlan(){ let c=document.getElementById("planDisplay"); if(!c)return; let html=`<div class="font-bold text-cyan-300">${appData.currentPlan.toUpperCase()} PHASE · %1RM</div>`; (appData.aiGeneratedPlan?.days||[]).forEach(day=>{ html+=`<div class="bg-black/30 p-3 rounded-xl mt-2"><div class="font-bold">${day.dayName}</div>`; day.exercises.forEach(ex=>{ let est=estimateWeight(ex.name,ex.percent||70,{squatKg:appData.squatKg,benchKg:appData.benchKg,deadliftKg:appData.deadliftKg}); html+=`<div class="flex justify-between text-xs"><span>${ex.name}</span><span>${ex.sets}x${ex.reps} @ ${ex.percent}% (≈${est}kg)</span></div>`; }); html+=`<button class="logDayPlanBtn text-xs bg-cyan-800/50 mt-2 px-2 py-1 rounded" data-day='${JSON.stringify(day.exercises)}'>📆 Log This Day</button></div>`; }); c.innerHTML=html; document.querySelectorAll(".logDayPlanBtn").forEach(btn=>btn.addEventListener("click",()=>{ let exercises=JSON.parse(btn.dataset.day); exercises.forEach(ex=>{ let est=estimateWeight(ex.name,ex.percent||70,{squatKg:appData.squatKg,benchKg:appData.benchKg,deadliftKg:appData.deadliftKg}); let sets=[]; for(let i=0;i<ex.sets;i++) sets.push({reps:parseInt(ex.reps)||8,weight:est}); addDetailedExerciseToDate(getTodayStr(),{name:ex.name,muscle:ex.muscle,type:"strength",notes:`from plan`,sets}); }); showToast("Plan logged"); })); }
+  async function callGemini(prompt){ if(!appData.geminiApiKey) throw new Error("No API key"); let url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${appData.geminiApiKey}`; let res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:800}})}); if(!res.ok)throw new Error("API error"); let data=await res.json(); return data.candidates[0].content.parts[0].text; }
+  function addChatMessage(role,content){ let c=document.getElementById("chatMessages"); let d=document.createElement("div"); d.className=`chat-message-${role} p-2 text-xs max-w-[85%] ${role==='user'?'ml-auto':'mr-auto'} mb-1`; d.innerText=content; c.appendChild(d); c.scrollTop=c.scrollHeight; }
+  // --- RANKING MODULE (50:50 Hybrid) ---
+  const rankingData = [
+    { name:"Bellion · Grand Marshal", total:1150, classic:98, icon:"🪽" },{ name:"Beru · Ant King", total:1020, classic:94, icon:"🐜" },{ name:"Igris · Blood-Red Commander", total:950, classic:89, icon:"⚔️" },{ name:"Tank · High Orc Warlord", total:970, classic:82, icon:"🛡️" },{ name:"Iron · Berserker", total:910, classic:78, icon:"🔨" },{ name:"Greed · Shadow Knight", total:880, classic:76, icon:"💰" },{ name:"Tusk · Orc Shaman", total:830, classic:75, icon:"🦷" },{ name:"Kaisel · Wyvern Lord", total:860, classic:68, icon:"🐉" },{ name:"Jima · Footsoldier", total:800, classic:72, icon:"⚙️" },{ name:"Fang · Shadow Wolf", total:750, classic:70, icon:"🐺" }
+  ];
+  const maxTotalRank = Math.max(...rankingData.map(r=>r.total));
+  let enrichedRank = rankingData.map(s=>{ let norm=(s.total/maxTotalRank)*100; let comp=(norm*0.5)+(s.classic*0.5); return {...s, normTotal:parseFloat(norm.toFixed(1)), composite:parseFloat(comp.toFixed(1))}; });
+  function getTier(c){ if(c>=94) return {letter:"S",cls:"tier-s"}; if(c>=85) return {letter:"A",cls:"tier-a"}; if(c>=75) return {letter:"B",cls:"tier-b"}; if(c>=65) return {letter:"C",cls:"tier-c"}; if(c>=55) return {letter:"D",cls:"tier-d"}; return {letter:"E",cls:"tier-e"}; }
+  let currentRankSort="composite";
+  function renderRankingTable(){ let sorted=[...enrichedRank]; if(currentRankSort==="composite") sorted.sort((a,b)=>b.composite-a.composite); else if(currentRankSort==="total") sorted.sort((a,b)=>b.total-a.total); else sorted.sort((a,b)=>b.classic-a.classic); let tbody=document.getElementById("rankingTableBody"); if(!tbody)return; tbody.innerHTML=sorted.map(s=>{ let tier=getTier(s.composite); return `<tr class="border-b border-gray-700/50"><td class="p-3"><div class="w-10 h-10 flex items-center justify-center rounded-full ${tier.cls} font-black text-lg">${tier.letter}</div></td><td class="p-3"><div class="flex items-center gap-2"><span class="text-xl">${s.icon}</span> <span class="font-bold">${s.name}</span></div></td><td class="p-3 text-center font-mono text-cyan-300">${s.total} kg</td><td class="p-3 text-center font-mono text-purple-300">${s.classic}</td><td class="p-3 text-center"><span class="font-black text-amber-300">${s.composite}</span><div class="progress-neon w-20 mx-auto mt-1"><div class="progress-fill-neon" style="width:${s.composite}%"></div></div></td><td class="p-3 hidden md:table-cell text-[10px]"><span class="bg-cyan-900/40 px-2 py-0.5 rounded-full">PWR ${s.normTotal}</span> + <span class="bg-purple-900/40 px-2 py-0.5 rounded-full">CLS ${s.classic}</span></td></tr>`; }).join(''); }
+  function initRankingEvents(){ document.getElementById("rankSortComposite")?.addEventListener("click",()=>{ currentRankSort="composite"; renderRankingTable(); }); document.getElementById("rankSortTotal")?.addEventListener("click",()=>{ currentRankSort="total"; renderRankingTable(); }); document.getElementById("rankSortClassic")?.addEventListener("click",()=>{ currentRankSort="classic"; renderRankingTable(); }); renderRankingTable(); }
+  // --- EVENT BINDINGS ---
+  document.getElementById("planSelector")?.addEventListener("change",e=>setActivePlan(e.target.value));
+  document.getElementById("regeneratePlanBtn")?.addEventListener("click",()=>{ if(appData.geminiApiKey) callGemini("Create 5 day workout plan with percentages").catch(e=>showToast("API error")); else showToast("Set Gemini key"); });
+  document.getElementById("adjustPlanBtn")?.addEventListener("click",()=>{ let q=prompt("Adjustment request:"); if(q) showToast("AI adjust (demo)"); });
+  document.getElementById("logFullDayBtn")?.addEventListener("click",()=>{ let todayName=new Date().toLocaleDateString('en-US',{weekday:'long'}); let dayPlan=appData.aiGeneratedPlan?.days.find(d=>d.dayName===todayName); if(dayPlan){ dayPlan.exercises.forEach(ex=>{ let est=estimateWeight(ex.name,ex.percent||70,{squatKg:appData.squatKg,benchKg:appData.benchKg,deadliftKg:appData.deadliftKg}); let sets=[]; for(let i=0;i<ex.sets;i++) sets.push({reps:parseInt(ex.reps)||8,weight:est}); addDetailedExerciseToDate(getTodayStr(),{name:ex.name,muscle:ex.muscle,type:"strength",notes:`auto log`,sets}); }); showToast("Logged today's plan"); }else showToast("No plan for today"); });
+  document.getElementById("logWorkoutBtn")?.addEventListener("click",()=>{ let muscle=document.getElementById("quickMuscle").value; let exName=document.getElementById("quickExercise").value; let type=document.getElementById("workoutType").value; let weight=parseFloat(document.getElementById("quickWeight").value)||0; let sets=[{reps:8,weight:weight},{reps:8,weight:weight},{reps:8,weight:weight}]; addDetailedExerciseToDate(getTodayStr(),{name:exName,muscle,type,notes:"quick log",sets}); });
+  document.getElementById("updateMeasurementsBtn")?.addEventListener("click",()=>{ let s=prompt("Shoulder cm",appData.shoulderCm); let w=prompt("Waist cm",appData.waistCm); if(s) appData.shoulderCm=parseFloat(s); if(w) appData.waistCm=parseFloat(w); recalcAll(); renderAllUI(); });
+  document.getElementById("updateLiftsBtn")?.addEventListener("click",()=>{ let sq=prompt("Squat kg",appData.squatKg); let b=prompt("Bench kg",appData.benchKg); let dl=prompt("Deadlift kg",appData.deadliftKg); if(sq) appData.squatKg=parseFloat(sq); if(b) appData.benchKg=parseFloat(b); if(dl) appData.deadliftKg=parseFloat(dl); recalcAll(); renderAllUI(); });
+  document.getElementById("claimBossBtn")?.addEventListener("click",()=>{ if(!appData.bossClaimed && appData.bossProgress>=2000){ appData.bossClaimed=true; appData.totalXP+=500; saveData(); recalcAll(); renderAllUI(); showToast("+500 XP Boss Slain!"); }else showToast("Need 2000 XP this month"); });
+  document.getElementById("configApiBtn")?.addEventListener("click",()=>{ let key=prompt("Gemini API Key:",appData.geminiApiKey); if(key) appData.geminiApiKey=key.trim(); saveData(); showToast("Key saved"); });
+  document.getElementById("sendChatBtn")?.addEventListener("click",async()=>{ let msg=document.getElementById("chatInput").value.trim(); if(!msg)return; addChatMessage("user",msg); addChatMessage("assistant","..."); try{ let reply=await callGemini(msg); document.getElementById("chatMessages").lastChild.remove(); addChatMessage("assistant",reply); }catch(e){ document.getElementById("chatMessages").lastChild.remove(); addChatMessage("assistant","Error: "+e.message); } document.getElementById("chatInput").value=""; });
+  document.getElementById("addExerciseToDayBtn")?.addEventListener("click",()=>openExerciseModal(currentSelectedDate));
+  document.getElementById("saveExerciseBtn")?.addEventListener("click",()=>{ let muscle=document.getElementById("exMuscle").value; let selected=document.getElementById("exNameSelect").value; let custom=document.getElementById("exCustomName").value.trim(); let name=custom||selected; if(!name)return; let type=document.getElementById("exType").value; let notes=document.getElementById("exNotes").value; let finalSets=setRows.filter(s=>s.reps>0); if(finalSets.length===0) finalSets=[{reps:8,weight:0}]; addDetailedExerciseToDate(currentEditDate||currentSelectedDate,{id:Date.now(),name,muscle,type,notes,sets:finalSets}); document.getElementById("exerciseModal").style.display="none"; });
+  document.getElementById("closeModalBtn")?.addEventListener("click",()=>document.getElementById("exerciseModal").style.display="none");
+  document.getElementById("addSetBtn")?.addEventListener("click",()=>{ setRows.push({reps:8,weight:40}); renderSetRows(); });
+  function initNav(){ document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>{ let pageId=`page-${btn.dataset.page}`; document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); })); }
+  let quickMuscle=document.getElementById("quickMuscle"); if(quickMuscle){ quickMuscle.innerHTML=MUSCLES.map(m=>`<option>${m}</option>`).join(''); quickMuscle.addEventListener("change",()=>{ let sel=document.getElementById("quickExercise"); sel.innerHTML=EXERCISE_LIB[quickMuscle.value].map(ex=>`<option>${ex}</option>`).join(''); }); quickMuscle.dispatchEvent(new Event("change")); }
+  loadData(); initNav(); initRankingEvents(); setActivePlan(appData.currentPlan||"normal"); renderRankingTable();
+</script>
+</body>
+</html>

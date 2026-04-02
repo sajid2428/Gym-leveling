@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>⚡ CYBER DIARY PRO · Fixed Gym Plan | Hybrid S→E Rank</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&family=Orbitron:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: radial-gradient(circle at 20% 30%, #03050b, #000000); font-family: 'Inter', sans-serif; color: #eef5ff; }
+    .cyber-card { background: rgba(8, 12, 25, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(0, 255, 255, 0.35); border-radius: 28px; box-shadow: 0 8px 20px rgba(0, 255, 255, 0.1); transition: 0.2s; }
+    .cyber-card:hover { border-color: #0ff; box-shadow: 0 0 18px rgba(0, 255, 255, 0.4); }
+    .neon-text { font-family: 'Orbitron', monospace; text-shadow: 0 0 4px cyan; }
+    .glow-btn { background: linear-gradient(135deg, #0a142e, #010514); border: 1px solid #0ff; transition: 0.2s; }
+    .glow-btn:hover { background: #00a6ff20; box-shadow: 0 0 12px cyan; }
+    .progress-neon { background: rgba(0, 255, 255, 0.15); border-radius: 40px; overflow: hidden; }
+    .progress-fill-neon { background: linear-gradient(90deg, #0ff, #3b82f6); height: 8px; width: 0%; border-radius: 40px; }
+    .page { display: none; animation: fadeGlow 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeGlow { 0% { opacity: 0; filter: blur(2px); } 100% { opacity: 1; filter: blur(0); } }
+    .nav-btn { background: #0f1222cc; backdrop-filter: blur(8px); border: 1px solid #2affee55; font-weight: 600; }
+    .nav-btn.active-nav { background: #00ccff22; border-color: cyan; box-shadow: 0 0 10px cyan; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #03050b; }
+    ::-webkit-scrollbar-thumb { background: cyan; border-radius: 10px; }
+    input, select, textarea { background: #0a0e1c; border: 1px solid #2affaa44; border-radius: 16px; padding: 8px 12px; color: white; }
+    input:focus, select:focus { outline: none; border-color: cyan; box-shadow: 0 0 8px cyan; }
+    .set-row { background: #0b0f1e; border-radius: 20px; padding: 6px; margin-bottom: 6px; border-left: 3px solid cyan; }
+    .tier-s { background: linear-gradient(145deg, #ffd966, #ff9f2e); color: #1a0f00; }
+    .tier-a { background: linear-gradient(145deg, #c0c0e0, #a0a0ff); color: #0a0a2a; }
+    .tier-b { background: linear-gradient(145deg, #cd7f32, #b86b1f); color: #fff0dd; }
+    .tier-c { background: #2a5f7a; color: #e0f2fe; }
+    .tier-d { background: #4a5260; }
+    .tier-e { background: #4a2e2e; }
+  </style>
+</head>
+<body class="pb-24">
+
+<div class="max-w-7xl mx-auto px-4 py-5">
+  <!-- Header -->
+  <div class="flex flex-wrap justify-between items-center gap-4 mb-6 cyber-card p-4 rounded-2xl">
+    <div>
+      <h1 class="text-3xl font-black neon-text bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"><i class="fas fa-microchip mr-2"></i>CYBER DIARY · FIXED PLAN</h1>
+      <p class="text-xs text-cyan-300/80">⚡ hybrid training · 50% powerlifting / 50% classic physique · full 5-day plans</p>
+    </div>
+    <div class="flex flex-wrap gap-2 text-sm">
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-trophy text-yellow-400"></i> <span id="hunterRankName">Recruit</span></div>
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-star-of-life text-cyan-400"></i> <span id="totalXPDisplay">0</span> XP</div>
+      <div class="bg-black/50 backdrop-blur rounded-2xl px-3 py-1.5 border border-cyan-500/40"><i class="fas fa-fire text-red-400"></i> <span id="streakValue">0</span></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="dashboard">📊 DASHBOARD</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="diary-calendar">📆 DIARY LOG</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="muscles">💪 MUSCLE GRID</button>
+    <button class="nav-btn px-5 py-2 rounded-full text-sm font-bold tracking-wider" data-page="ranking">🏆 S→E RANKING</button>
+  </div>
+
+  <!-- DASHBOARD (with fixed gym plan) -->
+  <div id="page-dashboard" class="page active">
+    <div class="cyber-card p-5 mb-6">
+      <div class="flex flex-wrap justify-between gap-4 items-center">
+        <div><i class="fas fa-dna text-cyan-400"></i> <span class="font-bold neon-text">TRAINING PHASE</span></div>
+        <select id="planSelector" class="bg-black/60 border-cyan-500 rounded-full px-4 py-2 text-sm">
+          <option value="normal">🏋️ Hybrid (Physique+Power)</option>
+          <option value="physique">💪 Classic Physique (V‑Taper)</option>
+          <option value="power">⚡ Powerlifting (Peak)</option>
+        </select>
+      </div>
+      <div id="planDisplay" class="mt-5 space-y-4 max-h-[550px] overflow-y-auto pr-2"></div>
+      <div class="flex gap-3 mt-5">
+        <button id="logFullDayBtn" class="flex-1 bg-cyan-700/70 border border-cyan-300 py-2 rounded-xl text-sm font-bold"><i class="fas fa-calendar-check"></i> LOG TODAY'S PLAN (auto weights)</button>
+      </div>
+    </div>
+
+    <!-- stats cards -->
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+      <div class="cyber-card p-4 border-l-4 border-l-amber-400">
+        <h2 class="text-xl font-bold"><i class="fas fa-user-astronaut mr-2 text-amber-400"></i>CLASSIC PHYSIQUE</h2>
+        <div class="mt-2 flex justify-between"><span>V‑Taper Ratio</span><span id="vTaperScore" class="font-mono">0.00</span></div>
+        <div class="progress-neon mt-1"><div id="vTaperProgress" class="progress-fill-neon w-0"></div></div>
+        <div class="grid grid-cols-2 gap-2 text-xs mt-3"><div>Shoulder: <span id="shoulderWidthVal">--</span> cm</div><div>Waist: <span id="waistVal">--</span> cm</div></div>
+        <button id="updateMeasurementsBtn" class="mt-3 bg-amber-800/60 text-xs py-1.5 px-3 rounded-full">Update Stats</button>
+      </div>
+      <div class="cyber-card p-4 border-l-4 border-l-red-400">
+        <h2 class="text-xl font-bold"><i class="fas fa-dumbbell mr-2 text-red-400"></i>POWERLIFTING SBD</h2>
+        <div class="grid grid-cols-3 gap-1 text-center text-xs mt-2"><div>Squat<br><span id="squatVal" class="font-bold text-lg">0</span> kg</div><div>Bench<br><span id="benchVal" class="font-bold text-lg">0</span> kg</div><div>Deadlift<br><span id="deadliftVal" class="font-bold text-lg">0</span> kg</div></div>
+        <div class="flex justify-between mt-2"><span>Total: <span id="powerTotal">0</span> kg</span><span id="powerRankBadge" class="text-xs bg-black/40 px-2 py-0.5 rounded-full">Novice</span></div>
+        <button id="updateLiftsBtn" class="mt-3 bg-red-800/60 text-xs py-1.5 px-3 rounded-full">Update PRs</button>
+      </div>
+    </div>
+
+    <!-- quick log -->
+    <div class="cyber-card p-5 mb-6">
+      <h2 class="font-bold text-lg"><i class="fas fa-bolt text-cyan-400"></i> QUICK LOG (3 sets x 8 reps)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+        <select id="quickMuscle" class="bg-black/60"></select>
+        <select id="quickExercise" class="bg-black/60"></select>
+        <select id="workoutType" class="bg-black/60"><option value="strength">💪 Strength</option><option value="mass">🏋️ Mass</option><option value="endurance">🏃 Endurance</option></select>
+        <input type="number" id="quickWeight" value="40" placeholder="Weight (kg)" class="bg-black/60">
+      </div>
+      <button id="logWorkoutBtn" class="mt-4 w-full glow-btn py-2 rounded-xl font-bold">⚡ LOG TODAY</button>
+    </div>
+
+    <!-- quests & boss -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="cyber-card p-4"><h2 class="font-bold"><i class="fas fa-tasks text-sky-400"></i> DAILY QUESTS</h2><div id="dailyQuestsList" class="space-y-2 mt-2 text-sm"></div></div>
+      <div class="cyber-card p-4"><h2 class="font-bold"><i class="fas fa-calendar-week text-indigo-400"></i> WEEKLY QUESTS</h2><div id="weeklyQuestsList" class="space-y-2 mt-2 text-sm"></div></div>
+    </div>
+    <div class="cyber-card p-4 mt-5 flex justify-between items-center flex-wrap">
+      <div><i class="fas fa-skull text-red-400 text-2xl"></i> <span class="font-bold">MONTHLY BOSS</span> <span id="bossProgressText">0/2000 XP</span></div>
+      <button id="claimBossBtn" class="bg-red-800/70 border border-red-500 px-5 py-1.5 rounded-full">Claim 500 XP</button>
+    </div>
+  </div>
+
+  <!-- DIARY PAGE -->
+  <div id="page-diary-calendar" class="page">
+    <div class="cyber-card p-5">
+      <h2 class="text-xl font-bold neon-text"><i class="fas fa-calendar-alt mr-2"></i>DETAILED LOGS</h2>
+      <div id="calendarDays" class="grid grid-cols-7 gap-2 my-4"></div>
+      <div class="bg-black/40 rounded-2xl p-4">
+        <div class="flex justify-between flex-wrap gap-2"><h3 id="selectedDayTitle" class="text-cyan-300 font-bold">Select a day</h3><button id="addExerciseToDayBtn" class="bg-green-700/70 px-3 py-1 rounded-full text-sm"><i class="fas fa-plus"></i> Add Exercise</button></div>
+        <div id="dayExercisesList" class="mt-3 space-y-3 max-h-96 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MUSCLES PAGE -->
+  <div id="page-muscles" class="page">
+    <div class="cyber-card p-5"><h2 class="font-bold"><i class="fas fa-microchip text-cyan-400"></i> 17 MUSCLES · CYBER RANK</h2><div id="muscleGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 max-h-[70vh] overflow-y-auto"></div></div>
+  </div>
+
+  <!-- RANKING PAGE -->
+  <div id="page-ranking" class="page">
+    <div class="cyber-card p-5">
+      <div class="flex flex-wrap justify-between items-center border-b border-cyan-500/50 pb-3 mb-4">
+        <h2 class="text-2xl font-black neon-text"><i class="fas fa-chart-line"></i> SHADOW HYBRID RANKING (S→E)</h2>
+        <div class="flex gap-2">
+          <button id="rankSortComposite" class="text-xs bg-cyan-900/40 border border-cyan-500 px-3 py-1.5 rounded-full">🏆 Hybrid</button>
+          <button id="rankSortTotal" class="text-xs bg-gray-800/40 px-3 py-1.5 rounded-full">🏋️ Total</button>
+          <button id="rankSortClassic" class="text-xs bg-gray-800/40 px-3 py-1.5 rounded-full">💪 Classic</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-cyan-950/40"><tr><th class="p-3">TIER</th><th>SOLDIER</th><th class="text-center">TOTAL (kg)</th><th class="text-center">CLASSIC</th><th class="text-center">COMPOSITE</th></tr></thead><tbody id="rankingTableBody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL for exercise -->
+<div id="exerciseModal" style="display:none;" class="fixed inset-0 bg-black/80 backdrop-blur flex items-center justify-center z-50"><div class="bg-gray-900 rounded-2xl p-5 max-w-md w-full border border-cyan-500"><h3 id="modalTitle" class="text-xl font-bold mb-3">Add Exercise</h3><select id="exMuscle" class="w-full mb-2"></select><select id="exNameSelect" class="w-full mb-2"></select><input id="exCustomName" placeholder="Custom name" class="w-full mb-2"><select id="exType" class="w-full mb-2"><option value="strength">Strength</option><option value="mass">Mass</option></select><textarea id="exNotes" rows="2" placeholder="notes" class="w-full mb-2"></textarea><div class="font-bold">Sets</div><div id="setsContainer" class="space-y-2 mb-3"></div><button id="addSetBtn" class="bg-blue-600 text-xs px-3 py-1 rounded-full">+ Add Set</button><div class="flex gap-2 mt-4"><button id="saveExerciseBtn" class="flex-1 bg-orange-600 py-2 rounded-xl">Save</button><button id="closeModalBtn" class="flex-1 bg-gray-700 py-2 rounded-xl">Cancel</button></div></div></div>
+
+<script>
+  // ======================= EXPANDED GYM PLANS (FIXED) =======================
+  const NORMAL_PLAN = {
+    days: [
+      { dayName: "Monday", exercises: [
+        { name: "Barbell Bench Press", sets: 4, reps: "4-6", muscle: "Chest", percent: 75 },
+        { name: "Incline DB Press", sets: 3, reps: "6-10", muscle: "Chest", percent: 70 },
+        { name: "Overhead Press", sets: 3, reps: "5-8", muscle: "Shoulders", percent: 65 },
+        { name: "Lateral Raise", sets: 4, reps: "12-15", muscle: "Shoulders", percent: 30 },
+        { name: "Triceps Pushdowns", sets: 3, reps: "8-12", muscle: "Triceps", percent: 50 }
+      ] },
+      { dayName: "Tuesday", exercises: [
+        { name: "Pull-ups / Lat Pulldown", sets: 4, reps: "6-10", muscle: "Back", percent: 70 },
+        { name: "Barbell Row", sets: 3, reps: "6-8", muscle: "Back", percent: 75 },
+        { name: "Face Pull", sets: 3, reps: "12-15", muscle: "Shoulders", percent: 40 },
+        { name: "Barbell Curls", sets: 3, reps: "8-10", muscle: "Biceps", percent: 50 },
+        { name: "Hammer Curls", sets: 3, reps: "8-12", muscle: "Biceps", percent: 45 }
+      ] },
+      { dayName: "Wednesday", exercises: [
+        { name: "Back Squat", sets: 4, reps: "3-5", muscle: "Quadriceps", percent: 80 },
+        { name: "Romanian Deadlift", sets: 3, reps: "6-8", muscle: "Hamstrings", percent: 70 },
+        { name: "Leg Press", sets: 3, reps: "8-12", muscle: "Quadriceps", percent: 75 },
+        { name: "Leg Curl", sets: 3, reps: "10-15", muscle: "Hamstrings", percent: 60 },
+        { name: "Calf Raise", sets: 4, reps: "10-15", muscle: "Calves", percent: 50 }
+      ] },
+      { dayName: "Thursday", exercises: [
+        { name: "DB Shoulder Press", sets: 4, reps: "5-8", muscle: "Shoulders", percent: 70 },
+        { name: "Lateral Raise", sets: 4, reps: "12-15", muscle: "Shoulders", percent: 30 },
+        { name: "Rear Delt Fly", sets: 3, reps: "12-15", muscle: "Shoulders", percent: 35 },
+        { name: "Cable Fly", sets: 3, reps: "10-15", muscle: "Chest", percent: 50 },
+        { name: "Skull Crushers", sets: 3, reps: "8-10", muscle: "Triceps", percent: 45 }
+      ] },
+      { dayName: "Friday", exercises: [
+        { name: "Deadlift", sets: 4, reps: "3-5", muscle: "Back", percent: 85 },
+        { name: "Rack Pull", sets: 3, reps: "4-6", muscle: "Back", percent: 90 },
+        { name: "T-bar Row", sets: 3, reps: "6-10", muscle: "Back", percent: 70 },
+        { name: "Shrugs", sets: 3, reps: "10-15", muscle: "Traps", percent: 70 },
+        { name: "Back Extension", sets: 3, reps: "12-15", muscle: "Lower Back", percent: 50 }
+      ] }
+    ]
+  };
+
+  const PHYSIQUE_PLAN = {
+    days: [
+      { dayName: "Monday", exercises: [{name:"Overhead Press", sets:5, reps:"4-6", muscle:"Shoulders", percent:75},{name:"Lateral Raise", sets:4, reps:"12-15", muscle:"Shoulders", percent:35},{name:"Upright Rows", sets:3, reps:"8-10", muscle:"Shoulders", percent:60},{name:"Face Pull", sets:4, reps:"15-20", muscle:"Shoulders", percent:40},{name:"Dumbbell Shrugs", sets:3, reps:"10-12", muscle:"Traps", percent:70}] },
+      { dayName: "Tuesday", exercises: [{name:"Pull-ups (wide)", sets:5, reps:"6-8", muscle:"Back", percent:70},{name:"Lat Pulldown", sets:4, reps:"8-10", muscle:"Back", percent:75},{name:"Seated Cable Row", sets:4, reps:"8-10", muscle:"Back", percent:70},{name:"Barbell Row", sets:3, reps:"6-8", muscle:"Back", percent:80},{name:"Hyperextension", sets:3, reps:"12-15", muscle:"Lower Back", percent:50}] },
+      { dayName: "Wednesday", exercises: [{name:"Squats", sets:4, reps:"5-8", muscle:"Quadriceps", percent:75},{name:"Leg Press", sets:4, reps:"10-12", muscle:"Quadriceps", percent:80},{name:"Walking Lunges", sets:3, reps:"8-10", muscle:"Quadriceps", percent:60},{name:"Leg Curls", sets:4, reps:"10-12", muscle:"Hamstrings", percent:65},{name:"Calf Raises", sets:4, reps:"15-20", muscle:"Calves", percent:60}] },
+      { dayName: "Thursday", exercises: [{name:"Incline Bench Press", sets:4, reps:"6-8", muscle:"Chest", percent:75},{name:"Dumbbell Flyes", sets:3, reps:"10-12", muscle:"Chest", percent:50},{name:"Dips", sets:3, reps:"8-10", muscle:"Chest", percent:70},{name:"Triceps Pushdowns", sets:3, reps:"10-12", muscle:"Triceps", percent:50},{name:"Skull Crushers", sets:3, reps:"8-10", muscle:"Triceps", percent:45}] },
+      { dayName: "Friday", exercises: [{name:"Deadlifts", sets:4, reps:"3-5", muscle:"Back", percent:85},{name:"Romanian Deadlifts", sets:4, reps:"6-8", muscle:"Hamstrings", percent:75},{name:"Pull-ups", sets:4, reps:"6-8", muscle:"Back", percent:70},{name:"Barbell Curls", sets:4, reps:"6-8", muscle:"Biceps", percent:50},{name:"Hammer Curls", sets:3, reps:"8-10", muscle:"Biceps", percent:45}] }
+    ]
+  };
+
+  const POWER_PLAN = {
+    days: [
+      { dayName: "Monday", exercises: [{name:"Squats", sets:5, reps:"3-5", muscle:"Quadriceps", percent:85},{name:"Bench Press", sets:5, reps:"3-5", muscle:"Chest", percent:85},{name:"Barbell Rows", sets:5, reps:"3-5", muscle:"Back", percent:80},{name:"Overhead Press", sets:4, reps:"3-5", muscle:"Shoulders", percent:75},{name:"Pull-ups", sets:3, reps:"5-8", muscle:"Back", percent:70}] },
+      { dayName: "Tuesday", exercises: [{name:"Deadlifts", sets:5, reps:"3-5", muscle:"Back", percent:90},{name:"Romanian Deadlifts", sets:4, reps:"5-6", muscle:"Hamstrings", percent:80},{name:"Leg Press", sets:4, reps:"6-8", muscle:"Quadriceps", percent:85},{name:"Leg Curls", sets:3, reps:"6-8", muscle:"Hamstrings", percent:70},{name:"Calf Raises", sets:4, reps:"8-10", muscle:"Calves", percent:70}] },
+      { dayName: "Wednesday", exercises: [{name:"Bench Press", sets:5, reps:"3-5", muscle:"Chest", percent:87},{name:"Incline Bench", sets:4, reps:"4-6", muscle:"Chest", percent:80},{name:"Close-grip Bench", sets:4, reps:"4-6", muscle:"Triceps", percent:75},{name:"Triceps Pushdowns", sets:3, reps:"6-8", muscle:"Triceps", percent:60},{name:"Dips (weighted)", sets:3, reps:"5-8", muscle:"Chest", percent:70}] },
+      { dayName: "Thursday", exercises: [{name:"Squats", sets:5, reps:"3-5", muscle:"Quadriceps", percent:87},{name:"Front Squats", sets:4, reps:"3-5", muscle:"Quadriceps", percent:75},{name:"Good Mornings", sets:4, reps:"5-6", muscle:"Lower Back", percent:70},{name:"Leg Extensions", sets:3, reps:"6-8", muscle:"Quadriceps", percent:65},{name:"Box Jumps", sets:3, reps:"3-5", muscle:"Quadriceps", percent:40}] },
+      { dayName: "Friday", exercises: [{name:"Deadlifts", sets:5, reps:"3-5", muscle:"Back", percent:92},{name:"Barbell Rows", sets:5, reps:"3-5", muscle:"Back", percent:85},{name:"Pull-ups (weighted)", sets:4, reps:"3-5", muscle:"Back", percent:75},{name:"Barbell Curls", sets:4, reps:"4-6", muscle:"Biceps", percent:55},{name:"Preacher Curls", sets:3, reps:"6-8", muscle:"Biceps", percent:50}] }
+    ]
+  };
+
+  // ======================= APP STATE =======================
+  let appData = {
+    workoutDiary: [], squatKg: 85, benchKg: 65, deadliftKg: 120, shoulderCm: 108, waistCm: 72,
+    totalXP: 0, streak: 0, muscleXP: {}, bossProgress: 0, bossClaimed: false, currentPlan: "normal",
+    dailyQuests: [], weeklyQuests: [], lastDailyReset: null, lastWeeklyReset: null, currentMonthKey: null
+  };
+  let currentSelectedDate = new Date().toISOString().slice(0,10);
+  let currentEditDate = null, currentEditExerciseIdx = null, setRows = [];
+
+  function saveData() { localStorage.setItem("CYBER_FIXED_V2", JSON.stringify(appData)); }
+  function loadData() {
+    const saved = localStorage.getItem("CYBER_FIXED_V2");
+    if(saved) Object.assign(appData, JSON.parse(saved));
+    if(!appData.workoutDiary) appData.workoutDiary = [];
+    if(!appData.muscleXP) appData.muscleXP = {};
+    const muscles = ["Chest","Back","Shoulders","Biceps","Triceps","Quadriceps","Hamstrings","Calves","Traps","Lower Back"];
+    muscles.forEach(m => { if(appData.muscleXP[m]===undefined) appData.muscleXP[m]=0; });
+    if(!appData.dailyQuests) appData.dailyQuests = generateDailyQuests();
+    if(!appData.weeklyQuests) appData.weeklyQuests = generateWeeklyQuests();
+    checkResets(); recalcAll(); saveData();
+  }
+  function generateDailyQuests() { return [{id:"d1",desc:"Complete workout",target:1,progress:0,type:"workout_count",rewardXP:40,claimed:false},{id:"d2",desc:"Earn 60 XP",target:60,progress:0,type:"xp_gain",rewardXP:45,claimed:false},{id:"d3",desc:"Train Shoulders/Back",target:1,progress:0,type:"aesthetic",rewardXP:35,claimed:false}]; }
+  function generateWeeklyQuests() { return [{id:"w1",desc:"5 workouts",target:5,progress:0,type:"workout_count",rewardXP:200,claimed:false},{id:"w2",desc:"Increase SBD total by 10kg",target:10,progress:0,type:"sbd_increase",rewardXP:180,claimed:false,startingTotal:appData.squatKg+appData.benchKg+appData.deadliftKg},{id:"w3",desc:"3 shoulder sessions",target:3,progress:0,type:"aesthetic",rewardXP:150,claimed:false}]; }
+  function checkResets() { const today=new Date().toISOString().slice(0,10); const weekKey=()=>{let d=new Date(); return `${d.getFullYear()}-W${Math.floor((d-new Date(d.getFullYear(),0,1))/86400000/7)}`;}; if(appData.lastDailyReset!==today){ appData.dailyQuests=generateDailyQuests(); appData.lastDailyReset=today; } if(appData.lastWeeklyReset!==weekKey()){ appData.weeklyQuests=generateWeeklyQuests(); appData.lastWeeklyReset=weekKey(); } const monthKey=`${new Date().getFullYear()}-${new Date().getMonth()}`; if(appData.currentMonthKey!==monthKey){ appData.bossProgress=0; appData.bossClaimed=false; appData.currentMonthKey=monthKey; } saveData(); }
+  function recalcAll() { let newMuscleXP={}; let totalXP=0,boss=0; let workoutDates=[]; for(let entry of appData.workoutDiary){ workoutDates.push(entry.date); for(let ex of entry.exercises){ let gain=0; for(let s of (ex.sets||[])){ let vol=(s.reps||1)*(s.weight||0); let add=Math.min(25, Math.floor(vol/5)+2); if(ex.type==="strength") add*=1.2; gain+=add; } gain=Math.min(gain,55); if(ex.muscle && newMuscleXP[ex.muscle]!==undefined) newMuscleXP[ex.muscle]=Math.min((newMuscleXP[ex.muscle]||0)+gain,1600); totalXP+=gain+3; boss+=gain+3; } } appData.muscleXP=newMuscleXP; appData.totalXP=totalXP; appData.bossProgress=Math.min(boss,2000); let streak=0, today=new Date().toISOString().slice(0,10); let dates=[...new Set(workoutDates)].sort(); let idx=dates.indexOf(today); if(idx!==-1){ streak=1; for(let i=idx-1;i>=0;i--) if((new Date(dates[i+1])-new Date(dates[i]))/86400000===1) streak++; else break; } appData.streak=streak; saveData(); renderAllUI(); }
+  function renderAllUI(){ renderHeader(); renderStats(); renderQuests(); renderBoss(); renderMuscles(); renderCalendar(); renderPlan(); if(document.getElementById("selectedDayTitle")) renderDayView(currentSelectedDate); }
+  function renderHeader(){ let ranks=["Recruit","Fighter","Slayer","Champion","Destroyer","Conqueror","Mythic","Legend"]; let idx=Math.min(7,Math.floor(appData.totalXP/300)); document.getElementById("hunterRankName").innerText=ranks[idx]; document.getElementById("totalXPDisplay").innerHTML=appData.totalXP; document.getElementById("streakValue").innerHTML=appData.streak; }
+  function renderStats(){ document.getElementById("vTaperScore").innerHTML=(appData.shoulderCm/appData.waistCm).toFixed(2); document.getElementById("vTaperProgress").style.width=Math.min(100,(appData.shoulderCm/appData.waistCm/1.8)*100)+"%"; document.getElementById("shoulderWidthVal").innerHTML=appData.shoulderCm; document.getElementById("waistVal").innerHTML=appData.waistCm; document.getElementById("squatVal").innerHTML=appData.squatKg; document.getElementById("benchVal").innerHTML=appData.benchKg; document.getElementById("deadliftVal").innerHTML=appData.deadliftKg; document.getElementById("powerTotal").innerHTML=appData.squatKg+appData.benchKg+appData.deadliftKg; }
+  function renderQuests(){ let dailyDiv=document.getElementById("dailyQuestsList"); if(dailyDiv){ dailyDiv.innerHTML=""; for(let q of appData.dailyQuests){ let done=q.progress>=q.target; dailyDiv.innerHTML+=`<div class="flex justify-between"><span>${q.desc} (+${q.rewardXP})</span><button class="claimQuestBtn" data-type="daily" data-id="${q.id}" ${q.claimed||!done?'disabled':''}>${q.claimed?"✅":done?"CLAIM":"🔒"}</button></div>`; } attachQuestListeners(); } }
+  function attachQuestListeners(){ document.querySelectorAll(".claimQuestBtn").forEach(btn=>btn.addEventListener("click",()=>{ let type=btn.dataset.type, id=btn.dataset.id; let arr=type==="daily"?appData.dailyQuests:appData.weeklyQuests; let q=arr.find(q=>q.id===id); if(q && !q.claimed && q.progress>=q.target){ q.claimed=true; appData.totalXP+=q.rewardXP; saveData(); recalcAll(); renderAllUI(); showToast(`+${q.rewardXP} XP`); } })); }
+  function renderBoss(){ document.getElementById("bossProgressText").innerHTML=`${appData.bossProgress}/2000 XP`; let btn=document.getElementById("claimBossBtn"); if(btn) btn.disabled=appData.bossClaimed||appData.bossProgress<2000; }
+  function renderMuscles(){ let c=document.getElementById("muscleGrid"); if(!c)return; c.innerHTML=""; let muscles=["Chest","Back","Shoulders","Biceps","Triceps","Quadriceps","Hamstrings","Calves","Traps","Lower Back"]; for(let m of muscles){ let xp=appData.muscleXP[m]||0; let level=Math.floor(xp/120); let p=(xp%120)/120*100; c.innerHTML+=`<div class="bg-black/40 p-2 rounded-xl"><div class="flex justify-between"><span>${m}</span><span class="text-xs">Lv${level}</span></div><div class="progress-neon mt-1"><div class="progress-fill-neon" style="width:${p}%"></div></div><div>${xp} XP</div></div>`; } }
+  function renderCalendar(){ let container=document.getElementById("calendarDays"); if(!container)return; let today=new Date(); let year=today.getFullYear(), month=today.getMonth(); let lastDay=new Date(year,month+1,0); let html=""; for(let d=1;d<=lastDay.getDate();d++){ let dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; let hasEntry=appData.workoutDiary.some(e=>e.date===dateStr); html+=`<button class="day-btn ${currentSelectedDate===dateStr?'bg-cyan-700':'bg-gray-800'} p-2 rounded-lg text-xs" data-date="${dateStr}">${d}<br>${hasEntry?'📝':''}</button>`; } container.innerHTML=html; document.querySelectorAll(".day-btn").forEach(btn=>btn.addEventListener("click",()=>{ currentSelectedDate=btn.dataset.date; renderCalendar(); renderDayView(currentSelectedDate); })); }
+  function renderDayView(date){ let title=document.getElementById("selectedDayTitle"); let list=document.getElementById("dayExercisesList"); if(!title)return; title.innerText=`📅 ${date}`; let entry=appData.workoutDiary.find(e=>e.date===date); if(!entry||entry.exercises.length===0){ list.innerHTML='<div class="text-center p-4 text-gray-400">No logs. Add exercise.</div>'; return; } list.innerHTML=entry.exercises.map((ex,idx)=>`<div class="bg-gray-900 p-3 rounded-xl"><div class="flex justify-between"><div><span class="font-bold text-cyan-300">${ex.name}</span> · ${ex.muscle}</div><div><button class="deleteExBtn text-red-400 text-xs" data-idx="${idx}">🗑</button></div></div><div class="text-xs">${ex.sets.map((s,i)=>`Set ${i+1}: ${s.reps}×${s.weight}kg`).join(' · ')}</div></div>`).join(''); document.querySelectorAll(".deleteExBtn").forEach(btn=>btn.addEventListener("click",()=>{ let i=parseInt(btn.dataset.idx); let entry=appData.workoutDiary.find(e=>e.date===date); if(entry){ entry.exercises.splice(i,1); if(entry.exercises.length===0) appData.workoutDiary=appData.workoutDiary.filter(e=>e.date!==date); recalcAll(); renderDayView(date); renderCalendar(); } })); }
+  function addDetailedExerciseToDate(date,ex){ let entry=appData.workoutDiary.find(e=>e.date===date); if(!entry){ entry={date,exercises:[]}; appData.workoutDiary.push(entry); } entry.exercises.push(ex); recalcAll(); renderDayView(date); renderCalendar(); showToast("Saved"); }
+  function estimateWeight(exName, percent, user){ let l=exName.toLowerCase(); if(l.includes("bench")) return Math.round(user.benchKg*percent/100); if(l.includes("squat")) return Math.round(user.squatKg*percent/100); if(l.includes("deadlift")) return Math.round(user.deadliftKg*percent/100); if(l.includes("row")||l.includes("pull")) return Math.round(user.benchKg*0.8*percent/100); if(l.includes("press")&&l.includes("shoulder")) return Math.round(user.benchKg*0.7*percent/100); return Math.round((user.benchKg+user.squatKg+user.deadliftKg)/3*percent/100); }
+  function renderPlan(){ let container=document.getElementById("planDisplay"); if(!container)return; let plan = appData.currentPlan==="normal"?NORMAL_PLAN:appData.currentPlan==="physique"?PHYSIQUE_PLAN:POWER_PLAN; let html=`<div class="text-cyan-300 font-bold mb-2">🔥 ${appData.currentPlan.toUpperCase()} PHASE · % of 1RM</div>`; plan.days.forEach(day=>{ html+=`<div class="bg-black/40 rounded-xl p-3 mb-3"><div class="font-bold text-orange-300">${day.dayName}</div><div class="space-y-1 mt-2 text-xs">`; day.exercises.forEach(ex=>{ let est=estimateWeight(ex.name, ex.percent||70, {squatKg:appData.squatKg, benchKg:appData.benchKg, deadliftKg:appData.deadliftKg}); html+=`<div class="flex justify-between border-b border-gray-700/50 py-1"><span>${ex.name}</span><span>${ex.sets}x${ex.reps} @ ${ex.percent}% (≈${est}kg)</span></div>`; }); html+=`</div><button class="logDayPlanBtn mt-2 text-xs bg-cyan-800/60 px-3 py-1.5 rounded-full" data-day='${JSON.stringify(day.exercises)}'>📆 Log This Day</button></div>`; }); container.innerHTML=html; document.querySelectorAll(".logDayPlanBtn").forEach(btn=>btn.addEventListener("click",()=>{ let exercises=JSON.parse(btn.dataset.day); exercises.forEach(ex=>{ let est=estimateWeight(ex.name, ex.percent||70, {squatKg:appData.squatKg, benchKg:appData.benchKg, deadliftKg:appData.deadliftKg}); let sets=[]; let repCount=typeof ex.reps==='string'?parseInt(ex.reps.split('-')[0]):(ex.reps||8); for(let i=0;i<ex.sets;i++) sets.push({reps:repCount, weight:est}); addDetailedExerciseToDate(new Date().toISOString().slice(0,10), {name:ex.name, muscle:ex.muscle, type:"strength", notes:`from plan ${ex.percent}%`, sets}); }); showToast("Logged plan day!"); })); }
+  function showToast(msg){ let t=document.createElement("div"); t.className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-black/90 text-cyan-300 px-4 py-2 rounded-full text-xs border border-cyan-500 z-50"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),1500); }
+
+  // ranking logic
+  const rankingData = [{name:"Bellion",total:1150,classic:98,icon:"👑"},{name:"Beru",total:1020,classic:94,icon:"🐜"},{name:"Igris",total:950,classic:89,icon:"⚔️"},{name:"Tank",total:970,classic:82,icon:"🛡️"},{name:"Iron",total:910,classic:78,icon:"🔨"},{name:"Greed",total:880,classic:76,icon:"💰"},{name:"Tusk",total:830,classic:75,icon:"🦷"},{name:"Kaisel",total:860,classic:68,icon:"🐉"},{name:"Jima",total:800,classic:72,icon:"⚙️"},{name:"Fang",total:750,classic:70,icon:"🐺"}];
+  const maxTotalRank=1150; let enriched=rankingData.map(s=>{let norm=(s.total/maxTotalRank)*100; let comp=(norm*0.5)+(s.classic*0.5); return {...s, composite:parseFloat(comp.toFixed(1))};});
+  function getTier(c){ if(c>=94) return "S"; if(c>=85) return "A"; if(c>=75) return "B"; if(c>=65) return "C"; if(c>=55) return "D"; return "E"; }
+  function renderRanking(){ let sorted=[...enriched].sort((a,b)=>b.composite-a.composite); let tbody=document.getElementById("rankingTableBody"); if(tbody) tbody.innerHTML=sorted.map(s=>`<tr class="border-b"><td class="p-2"><span class="px-2 py-1 rounded-full ${getTier(s.composite)==='S'?'tier-s':getTier(s.composite)==='A'?'tier-a':'bg-gray-700'}">${getTier(s.composite)}</span></td><td>${s.icon} ${s.name}</td><td class="text-center">${s.total} kg</td><td class="text-center">${s.classic}</td><td class="text-center font-bold">${s.composite}</td></tr>`).join(''); }
+  
+  // event bindings
+  document.getElementById("planSelector")?.addEventListener("change",(e)=>{ appData.currentPlan=e.target.value; saveData(); renderPlan(); });
+  document.getElementById("logFullDayBtn")?.addEventListener("click",()=>{ let todayName=new Date().toLocaleDateString('en-US',{weekday:'long'}); let plan = appData.currentPlan==="normal"?NORMAL_PLAN:appData.currentPlan==="physique"?PHYSIQUE_PLAN:POWER_PLAN; let dayPlan=plan.days.find(d=>d.dayName===todayName); if(dayPlan){ dayPlan.exercises.forEach(ex=>{ let est=estimateWeight(ex.name, ex.percent||70, {squatKg:appData.squatKg, benchKg:appData.benchKg, deadliftKg:appData.deadliftKg}); let sets=[]; let repCount=typeof ex.reps==='string'?parseInt(ex.reps.split('-')[0]):(ex.reps||8); for(let i=0;i<ex.sets;i++) sets.push({reps:repCount, weight:est}); addDetailedExerciseToDate(new Date().toISOString().slice(0,10), {name:ex.name, muscle:ex.muscle, type:"strength", notes:`auto log`, sets}); }); showToast("Logged today's full plan!"); } else showToast("No plan for today (check weekday name)"); });
+  document.getElementById("logWorkoutBtn")?.addEventListener("click",()=>{ let muscle=document.getElementById("quickMuscle").value; let exName=document.getElementById("quickExercise").value; let type=document.getElementById("workoutType").value; let weight=parseFloat(document.getElementById("quickWeight").value)||0; let sets=[{reps:8,weight:weight},{reps:8,weight:weight},{reps:8,weight:weight}]; addDetailedExerciseToDate(new Date().toISOString().slice(0,10), {name:exName, muscle, type, notes:"quick log", sets}); });
+  document.getElementById("updateMeasurementsBtn")?.addEventListener("click",()=>{ let s=prompt("Shoulder cm",appData.shoulderCm); let w=prompt("Waist cm",appData.waistCm); if(s) appData.shoulderCm=parseFloat(s); if(w) appData.waistCm=parseFloat(w); saveData(); renderAllUI(); });
+  document.getElementById("updateLiftsBtn")?.addEventListener("click",()=>{ let sq=prompt("Squat kg",appData.squatKg); let b=prompt("Bench kg",appData.benchKg); let dl=prompt("Deadlift kg",appData.deadliftKg); if(sq) appData.squatKg=parseFloat(sq); if(b) appData.benchKg=parseFloat(b); if(dl) appData.deadliftKg=parseFloat(dl); saveData(); recalcAll(); renderAllUI(); });
+  document.getElementById("claimBossBtn")?.addEventListener("click",()=>{ if(!appData.bossClaimed && appData.bossProgress>=2000){ appData.bossClaimed=true; appData.totalXP+=500; saveData(); recalcAll(); renderAllUI(); showToast("+500 XP Boss Slain!"); }else showToast("Need 2000 XP this month"); });
+  document.getElementById("addExerciseToDayBtn")?.addEventListener("click",()=>{ openExerciseModal(); });
+  function openExerciseModal(){ document.getElementById("exerciseModal").style.display="flex"; setRows=[{reps:8,weight:40}]; renderSetRows(); }
+  function renderSetRows(){ let container=document.getElementById("setsContainer"); container.innerHTML=""; setRows.forEach((set,idx)=>{ let div=document.createElement("div"); div.className="set-row flex gap-2 items-center"; div.innerHTML=`<input type="number" placeholder="Reps" value="${set.reps}" class="set-reps w-20" data-idx="${idx}"><input type="number" placeholder="kg" value="${set.weight}" class="set-weight w-24" data-idx="${idx}"><button class="removeSetBtn text-red-400" data-idx="${idx}"><i class="fas fa-trash"></i></button>`; container.appendChild(div); }); document.querySelectorAll(".set-reps").forEach(inp=>inp.addEventListener("change",(e)=>{ let i=parseInt(inp.dataset.idx); setRows[i].reps=parseInt(inp.value)||0; })); document.querySelectorAll(".set-weight").forEach(inp=>inp.addEventListener("change",(e)=>{ let i=parseInt(inp.dataset.idx); setRows[i].weight=parseFloat(inp.value)||0; })); document.querySelectorAll(".removeSetBtn").forEach(btn=>btn.addEventListener("click",(e)=>{ let i=parseInt(btn.dataset.idx); setRows.splice(i,1); renderSetRows(); })); }
+  document.getElementById("saveExerciseBtn")?.addEventListener("click",()=>{ let muscle=document.getElementById("exMuscle").value; let exName=document.getElementById("exNameSelect").value; let custom=document.getElementById("exCustomName").value.trim(); let name=custom||exName; let type=document.getElementById("exType").value; let notes=document.getElementById("exNotes").value; let finalSets=setRows.filter(s=>s.reps>0); if(finalSets.length===0) finalSets=[{reps:8,weight:0}]; addDetailedExerciseToDate(currentSelectedDate,{id:Date.now(),name,muscle,type,notes,sets:finalSets}); document.getElementById("exerciseModal").style.display="none"; });
+  document.getElementById("closeModalBtn")?.addEventListener("click",()=>document.getElementById("exerciseModal").style.display="none");
+  document.getElementById("addSetBtn")?.addEventListener("click",()=>{ setRows.push({reps:8,weight:40}); renderSetRows(); });
+  let quickMuscle=document.getElementById("quickMuscle"); if(quickMuscle){ let muscles=["Chest","Back","Shoulders","Biceps","Triceps","Quadriceps","Hamstrings","Calves"]; quickMuscle.innerHTML=muscles.map(m=>`<option>${m}</option>`).join(''); quickMuscle.addEventListener("change",()=>{ let exLib={"Chest":["Bench Press","Incline Press","Fly"],"Back":["Pull-ups","Row","Lat Pulldown"],"Shoulders":["Press","Lateral Raise"],"Biceps":["Curls"],"Triceps":["Pushdowns"],"Quadriceps":["Squat","Leg Press"],"Hamstrings":["Leg Curl"],"Calves":["Calf Raise"]}; let select=document.getElementById("quickExercise"); select.innerHTML=exLib[quickMuscle.value].map(ex=>`<option>${ex}</option>`).join(''); }); quickMuscle.dispatchEvent(new Event("change")); }
+  let exMuscle=document.getElementById("exMuscle"); if(exMuscle){ let musclesAll=["Chest","Back","Shoulders","Biceps","Triceps","Quadriceps","Hamstrings","Calves","Traps","Lower Back"]; exMuscle.innerHTML=musclesAll.map(m=>`<option>${m}</option>`).join(''); exMuscle.addEventListener("change",()=>{ let lib={"Chest":["Bench","Incline","Fly"],"Back":["Pull-up","Row","Pulldown"],"Shoulders":["Press","Raise"],"Biceps":["Curl"],"Triceps":["Pushdown"],"Quadriceps":["Squat","Leg Press"],"Hamstrings":["Leg Curl"],"Calves":["Calf Raise"],"Traps":["Shrug"],"Lower Back":["Hyperextension"]}; let select=document.getElementById("exNameSelect"); select.innerHTML=(lib[exMuscle.value]||["Exercise"]).map(ex=>`<option>${ex}</option>`).join(''); }); exMuscle.dispatchEvent(new Event("change")); }
+  function initNav(){ document.querySelectorAll(".nav-btn").forEach(btn=>btn.addEventListener("click",()=>{ let pageId=`page-${btn.dataset.page}`; document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); })); }
+  loadData(); initNav(); renderRanking(); setInterval(()=>{ recalcAll(); }, 30000);
+</script>
+</body>
+</html>
